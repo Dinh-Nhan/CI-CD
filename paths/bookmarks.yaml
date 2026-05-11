@@ -2,8 +2,6 @@ get:
   tags: [Bookmark]
   summary: Lấy danh sách bookmark (có thể search + filter)
   # operationId: listBookmarks
-  # HIjdkfjdddddddddddddd
-  # dldllflggkfkgkgk
   parameters:
     - name: q
       in: query
