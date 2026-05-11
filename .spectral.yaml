@@ -1,0 +1,25 @@
+rules:
+  operation-must-have-operation-id:
+    description: "Every operation must have an operationId"
+    severity: error
+    given: "$.paths[*][get,post,put,patch,delete]"
+    then:
+      field: operationId
+      function: truthy
+
+  operation-must-have-summary:
+    description: "Every operation must have a summary"
+    severity: error
+    given: "$.paths[*][get,post,put,patch,delete]"
+    then:
+      field: summary
+      function: truthy
+
+  operation-summary-starts-uppercase:
+    description: "Summary should start with uppercase"
+    severity: warn
+    given: "$.paths[*][get,post,put,patch,delete].summary"
+    then:
+      function: pattern
+      functionOptions:
+        match: "^[A-Z]"

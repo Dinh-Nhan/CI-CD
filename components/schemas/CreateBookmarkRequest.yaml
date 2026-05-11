@@ -1,0 +1,31 @@
+type: object
+required: [url, title]
+additionalProperties: false
+properties:
+  url:
+    type: string
+    format: uri
+    pattern: '^https?://'
+    maxLength: 2048
+    description: URL của bookmark. Chỉ chấp nhận scheme http hoặc https.
+  title:
+    type: string
+    minLength: 1
+    maxLength: 255
+    description: Tiêu đề hiển thị của bookmark
+  tags:
+    type: array
+    description: >
+      Danh sách tags. Nếu không gửi, server mặc định là [].
+      So sánh unique theo case-insensitive.
+    items:
+      type: string
+      minLength: 1
+      maxLength: 50
+    uniqueItems: true
+    maxItems: 50
+  folder_id:
+    type: string
+    format: uuid
+    nullable: true
+    description: ID của folder chứa bookmark. Bỏ qua nếu không thuộc folder nào.

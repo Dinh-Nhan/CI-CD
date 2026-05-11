@@ -1,0 +1,34 @@
+type: object
+minProperties: 1
+additionalProperties: false
+description: |
+  Ít nhất một trường phải được cung cấp.
+  Các trường không gửi lên sẽ giữ nguyên giá trị hiện tại.
+properties:
+  url:
+    type: string
+    format: uri
+    pattern: '^https?://'
+    maxLength: 2048
+    description: URL của bookmark. Chỉ chấp nhận scheme http hoặc https.
+  title:
+    type: string
+    minLength: 1
+    maxLength: 255
+    description: Tiêu đề hiển thị của bookmark
+  tags:
+    type: array
+    description: >
+      Thay thế toàn bộ tags hiện tại. Gửi [] để xóa hết tags.
+      So sánh unique theo case-insensitive.
+    items:
+      type: string
+      minLength: 1
+      maxLength: 50
+    uniqueItems: true
+    maxItems: 50
+  folder_id:
+    type: string
+    format: uuid
+    nullable: true
+    description: Gửi null để gỡ bookmark ra khỏi folder

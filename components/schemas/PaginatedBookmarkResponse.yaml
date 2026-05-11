@@ -1,0 +1,31 @@
+type: object
+required: [data, total, page, limit, total_pages, has_next, has_prev]
+properties:
+  data:
+    type: array
+    items:
+      $ref: './Bookmark.yaml'
+  total:
+    type: integer
+    minimum: 0
+    description: Tổng số bookmark thỏa điều kiện filter
+  page:
+    type: integer
+    minimum: 1
+    maximum: 10000
+    description: Trang hiện tại
+  limit:
+    type: integer
+    minimum: 1
+    maximum: 100
+    description: Số lượng item mỗi trang
+  total_pages:
+    type: integer
+    minimum: 0
+    description: Tổng số trang
+  has_next:
+    type: boolean
+    description: Còn trang tiếp theo hay không
+  has_prev:
+    type: boolean
+    description: Có trang trước hay không

@@ -1,0 +1,94 @@
+parameters:
+  - name: id
+    in: path
+    required: true
+    schema:
+      type: string
+      format: uuid
+
+get:
+  tags: [Bookmark]
+  summary: Lấy chi tiết bookmark
+  operationId: getBookmark
+  responses:
+    '200':
+      description: Thành công
+      content:
+        application/json:
+          schema:
+            $ref: '../components/schemas/ApiResponseBookmark.yaml'
+          example:
+            data:
+              id: "550e8400-e29b-41d4-a716-446655440000"
+              url: "https://google.com"
+              title: "Google"
+              tags: ["search", "tool"]
+              folder_id: null
+              created_at: "2024-01-15T08:00:00Z"
+              updated_at: "2024-01-15T08:00:00Z"
+    '401':
+      $ref: '../components/responses/Unauthorized.yaml'
+    '404':
+      $ref: '../components/responses/NotFound.yaml'
+    '500':
+      $ref: '../components/responses/InternalServerError.yaml'
+
+patch:
+  tags: [Bookmark]
+  summary: Cập nhật một phần bookmark
+  description: |
+    Cập nhật một hoặc nhiều trường của bookmark.
+
+    **Lưu ý về `tags`**: Nếu trường `tags` được gửi lên, toàn bộ danh sách tags hiện tại sẽ bị
+    thay thế bởi giá trị mới. Gửi `tags: []` để xóa hết tags. Không gửi trường `tags` nếu
+    muốn giữ nguyên tags hiện tại.
+
+    **Lưu ý về `folder_id`**: Gửi `folder_id: null` để gỡ bookmark ra khỏi folder.
+  operationId: updateBookmark
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: '../components/schemas/UpdateBookmarkRequest.yaml'
+        example:
+          title: "Updated title"
+
+  responses:
+    '200':
+      description: Thành công
+      content:
+        application/json:
+          schema:
+            $ref: '../components/schemas/ApiResponseBookmark.yaml'
+          example:
+            data:
+              id: "550e8400-e29b-41d4-a716-446655440000"
+              url: "https://google.com"
+              title: "Updated title"
+              tags: ["search", "tool"]
+              folder_id: null
+              created_at: "2024-01-15T08:00:00Z"
+              updated_at: "2024-01-15T09:30:00Z"
+    '401':
+      $ref: '../components/responses/Unauthorized.yaml'
+    '404':
+      $ref: '../components/responses/NotFound.yaml'
+    '422':
+      $ref: '../components/responses/UnprocessableEntity.yaml'
+    '500':
+      $ref: '../components/responses/InternalServerError.yaml'
+
+delete:
+  tags: [Bookmark]
+  summary: Xóa bookmark
+  operationId: deleteBookmark
+  responses:
+    '204':
+      description: Xóa thành công
+    '401':
+      $ref: '../components/responses/Unauthorized.yaml'
+    '404':
+      $ref: '../components/responses/NotFound.yaml'
+    '500':
+      $ref: '../components/responses/InternalServerError.yaml'

@@ -1,0 +1,108 @@
+get:
+  tags: [Bookmark]
+  summary: Lấy danh sách bookmark (có thể search + filter)
+  operationId: listBookmarks
+  parameters:
+    - name: q
+      in: query
+      description: Từ khóa tìm kiếm (title, url)
+      schema:
+        type: string
+        minLength: 1
+        maxLength: 200
+
+    - name: tag
+      in: query
+      description: Lọc theo tag
+      schema:
+        type: string
+        minLength: 1
+        maxLength: 50
+
+    - name: folder_id
+      in: query
+      description: Lọc theo thư mục
+      schema:
+        type: string
+        format: uuid
+
+    - name: page
+      in: query
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 10000
+        default: 1
+
+    - name: limit
+      in: query
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 100
+        default: 10
+
+  responses:
+    '200':
+      description: Danh sách bookmark
+      content:
+        application/json:
+          schema:
+            $ref: '../components/schemas/PaginatedBookmarkResponse.yaml'
+          example:
+            data:
+              - id: "550e8400-e29b-41d4-a716-446655440000"
+                url: "https://google.com"
+                title: "Google"
+                tags: ["search", "tool"]
+                folder_id: null
+                created_at: "2024-01-15T08:00:00Z"
+                updated_at: "2024-01-15T08:00:00Z"
+            total: 42
+            page: 1
+            limit: 10
+            total_pages: 5
+            has_next: true
+            has_prev: false
+    '401':
+      $ref: '../components/responses/Unauthorized.yaml'
+    '500':
+      $ref: '../components/responses/InternalServerError.yaml'
+
+post:
+  tags: [Bookmark]
+  summary: Tạo bookmark mới
+  operationId: createBookmark
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: '../components/schemas/CreateBookmarkRequest.yaml'
+        example:
+          url: "https://google.com"
+          title: "Google"
+          tags: ["search", "tool"]
+
+  responses:
+    '201':
+      description: Tạo thành công
+      content:
+        application/json:
+          schema:
+            $ref: '../components/schemas/ApiResponseBookmark.yaml'
+          example:
+            data:
+              id: "550e8400-e29b-41d4-a716-446655440000"
+              url: "https://google.com"
+              title: "Google"
+              tags: ["search", "tool"]
+              folder_id: null
+              created_at: "2024-01-15T08:00:00Z"
+              updated_at: "2024-01-15T08:00:00Z"
+    '401':
+      $ref: '../components/responses/Unauthorized.yaml'
+    '422':
+      $ref: '../components/responses/UnprocessableEntity.yaml'
+    '500':
+      $ref: '../components/responses/InternalServerError.yaml'

@@ -29,5 +29,5 @@ jobs:
 
       - name: Run Spectral Lint
         run: |
-          spectral lint openapi/openapi.yaml \
+          spectral lint openapi.yaml \
           --ruleset .spectral.yaml
