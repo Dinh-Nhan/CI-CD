@@ -47,11 +47,18 @@ jobs:
       - name: Build API Documentation
         run: redocly build-docs openapi-bundled.yaml -o test-api.html
 
+      - name: Prepare deployment folder
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        run: |
+          mkdir -p _site
+          cp test-api.html _site/
+          cp test-api.html _site/index.html
+
       - name: Upload artifact for GitHub Pages
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         uses: actions/upload-pages-artifact@v3
         with:
-          path: '.'
+          path: '_site'
 
   deploy:
     runs-on: ubuntu-latest
