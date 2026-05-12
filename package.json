@@ -1,0 +1,25 @@
+{
+  "name": "test-spectral",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Dinh-Nhan/CI-CD.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/Dinh-Nhan/CI-CD/issues"
+  },
+  "homepage": "https://github.com/Dinh-Nhan/CI-CD#readme",
+  "devDependencies": {
+    "@redocly/cli": "^2.30.4",
+    "@stoplight/spectral-cli": "^6.15.1"
+  }
+}
