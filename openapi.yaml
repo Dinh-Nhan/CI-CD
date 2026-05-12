@@ -16,14 +16,16 @@ info:
   contact:
     name: Đinh Nhân
     email: api@example.com
+  license:
+    name: MIT
+    identifier: MIT
+    url: https://opensource.org/licenses/MIT
 
 servers:
-  - url: https://api.example.com
+  - url: https://api.yourdomain.com
     description: Production
-  - url: https://staging-api.example.com
+  - url: https://staging-api.yourdomain.com
     description: Staging
-  - url: http://localhost:3000
-    description: Local development
 
 security:
   - BearerAuth: []

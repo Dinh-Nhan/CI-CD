@@ -28,7 +28,8 @@ properties:
     uniqueItems: true
     maxItems: 50
   folder_id:
-    type: string
+    type:
+      - string
+      - "null"
     format: uuid
-    nullable: true
     description: Gửi null để gỡ bookmark ra khỏi folder
