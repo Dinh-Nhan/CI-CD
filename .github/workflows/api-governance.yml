@@ -61,7 +61,7 @@ jobs:
         run: npx redocly bundle openapi.yaml -o openapi-bundled.yaml
 
       - name: Build API Documentation
-        run: npx redocly build-docs openapii-bundled.yaml -o api-docs.html
+        run: npx redocly build-docs openapi-bundled.yaml -o api-docs.html
 
       - name: Prepare deployment folder
         run: |
