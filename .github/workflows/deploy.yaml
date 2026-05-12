@@ -11,8 +11,8 @@ jobs:
 
     #Tránh deploy trùng nhau khi có nhiều push lên main
     concurrency:
-    group: pages-deploy
-    cancel-in-progress: true
+      group: pages-deploy
+      cancel-in-progress: true
 
     # Cấp quyền để deploy lên GitHub Pages
     permissions:
