@@ -61,13 +61,13 @@ jobs:
         run: npx redocly build-docs openapi-bundled.yaml -o api-docs.html
 
       # PR Preview folder
-      - name: Prepare deployment folder
+      - name: Prepare PR folder
         run: |
-          mkdir -p _site
-          cp api-docs.html _site/index.html
+          mkdir -p _site/pr-${{ github.event.number }}
+          cp api-docs.html _site/pr-${{ github.event.number }}/index.html
 
       # Upload artifact (PR preview)
-      - name: Upload artifact for GitHub Pages
+      - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: '_site'
+          path: _site
