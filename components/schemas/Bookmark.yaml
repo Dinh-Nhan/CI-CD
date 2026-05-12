@@ -34,9 +34,10 @@ properties:
     uniqueItems: true
     maxItems: 50
   folder_id:
-    type: string
+    type:
+      - string
+      - "null"
     format: uuid
-    nullable: true
     description: ID của folder chứa bookmark. null = không thuộc folder nào
   created_at:
     type: string
