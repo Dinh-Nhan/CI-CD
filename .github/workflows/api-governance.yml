@@ -32,13 +32,11 @@ jobs:
           node-version: 20
           cache: 'npm'
 
-      - name: Install Spectral CLI
-        run: npm install -g @stoplight/spectral-cli
+      - name: Install dependencies
+        run: npm ci
 
       - name: Run Spectral Lint
-        run: |
-          spectral lint openapi.yaml \
-          --ruleset .spectral.yaml
+        run: npm spectral lint openapi.yaml --ruleset .spectral.yaml
 
   # Job 2: Build docs — chỉ chạy khi push lên main, sau khi lint pass
   build:
@@ -56,14 +54,14 @@ jobs:
           node-version: 20
           cache: 'npm'
 
-      - name: Install Redocly CLI
-        run: npm install -g @redocly/cli
+      - name: Install dependencies
+        run: npm ci
 
       - name: Bundle OpenAPI
-        run: redocly bundle openapi.yaml -o openapi-bundled.yaml
+        run: npx redocly bundle openapi.yaml -o openapi-bundled.yaml
 
       - name: Build API Documentation
-        run: redocly build-docs openapi-bundled.yaml -o api-docs.html
+        run: npx redocly build-docs openapii-bundled.yaml -o api-docs.html
 
       - name: Prepare deployment folder
         run: |
