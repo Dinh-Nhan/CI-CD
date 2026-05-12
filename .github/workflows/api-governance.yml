@@ -18,7 +18,8 @@ permissions:
   id-token: write
 
 jobs:
-  spectral-lint:
+  # Job 1: Chỉ lint — chạy trên cả PR lẫn push
+  lint:
     runs-on: ubuntu-latest
 
     steps:
@@ -29,6 +30,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
+          cache: 'npm'
 
       - name: Install Spectral CLI
         run: npm install -g @stoplight/spectral-cli
@@ -38,6 +40,22 @@ jobs:
           spectral lint openapi.yaml \
           --ruleset .spectral.yaml
 
+  # Job 2: Build docs — chỉ chạy khi push lên main, sau khi lint pass
+  build:
+    runs-on: ubuntu-latest
+    needs: lint
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup NodeJS
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
       - name: Install Redocly CLI
         run: npm install -g @redocly/cli
 
@@ -45,24 +63,22 @@ jobs:
         run: redocly bundle openapi.yaml -o openapi-bundled.yaml
 
       - name: Build API Documentation
-        run: redocly build-docs openapi-bundled.yaml -o test-api.html
+        run: redocly build-docs openapi-bundled.yaml -o api-docs.html
 
       - name: Prepare deployment folder
-        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         run: |
           mkdir -p _site
-          cp test-api.html _site/
-          cp test-api.html _site/index.html
+          cp api-docs.html _site/index.html
 
       - name: Upload artifact for GitHub Pages
-        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         uses: actions/upload-pages-artifact@v3
         with:
           path: '_site'
 
+  # Job 3: Deploy — chỉ chạy sau khi build thành công
   deploy:
     runs-on: ubuntu-latest
-    needs: spectral-lint
+    needs: build
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
 
     environment:
