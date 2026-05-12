@@ -36,7 +36,7 @@ jobs:
         run: npm ci
 
       - name: Run Spectral Lint
-        run: npm spectral lint openapi.yaml --ruleset .spectral.yaml
+        run: npx spectral lint openapi.yaml --ruleset .spectral.yaml
 
   # Job 2: Build docs — chỉ chạy khi push lên main, sau khi lint pass
   build:
