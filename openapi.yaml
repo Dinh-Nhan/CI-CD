@@ -18,6 +18,8 @@ info:
     email: api@example.com
   license:
     name: MIT
+    identifier: MIT
+    url: https://opensource.org/licenses/MIT
 
 servers:
   - url: https://api.yourdomain.com

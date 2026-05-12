@@ -32,7 +32,7 @@ jobs:
         run: npx swagger-cli validate openapi.yaml
 
       - name: Redocly lint
-        run: npx @redocly/cli lint openapi.yaml
+        run: npx @redocly/cli lint openapi.yaml --format=codeframe
 
   # Job 2: Build docs — chỉ chạy khi push lên main, hoặc ngay khi tạo PR, sau khi lint pass
   build:
