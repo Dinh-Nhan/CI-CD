@@ -21,4 +21,4 @@ jobs:
 
   build:
     needs: [validate, diff]
-    uses: ./.github/workflows/build.yml
+    uses: ./.github/workflows/build.yaml
