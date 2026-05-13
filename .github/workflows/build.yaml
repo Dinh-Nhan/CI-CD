@@ -1,0 +1,43 @@
+name: Build API Documentation
+
+on:
+  workflow_call:
+
+jobs:
+  build:
+    name: Build API Documentation
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup NodeJS
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Bundle OpenAPI Specification
+        run: npm run bundle:api
+
+      - name: Build API Documentation
+        run: npm run build:docs
+
+      - name: Prepare Preview Folder
+        run: |
+          mkdir -p _site/pr-${{ github.event.number }}
+          cp api-docs.html _site/pr-${{ github.event.number }}/index.html
+
+      - name: Upload PR Preview Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: pr-preview-${{ github.event.number }}
+          path: _site
+          retention-days: 7
