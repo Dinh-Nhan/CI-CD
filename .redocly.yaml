@@ -1,0 +1,8 @@
+# .redocly.yaml
+apis:
+  main:
+    root: openapi.yaml
+
+rules:
+  spec: error          # validate theo đúng version khai báo trong file (3.0.3)
+  nullable-type-sibling: off   # rule này chỉ áp dụng cho 3.1, tắt đi cho 3.0
