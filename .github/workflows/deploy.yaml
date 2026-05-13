@@ -5,12 +5,10 @@ on:
     branches:
       - main
 
-# Tránh deploy trùng nhau khi có nhiều push lên main
 concurrency:
-  group: pages-deploy
+  group: deploy-${{ github.ref }}
   cancel-in-progress: true
 
-# Cấp quyền để deploy lên GitHub Pages
 permissions:
   contents: read
   pages: write
@@ -18,7 +16,9 @@ permissions:
 
 jobs:
   deploy:
+    name: Deploy API Documentation
     runs-on: ubuntu-latest
+    timeout-minutes: 10
 
     environment:
       name: github-pages
@@ -32,27 +32,43 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: 'npm'
+          cache: npm
+          cache-dependency-path: package-lock.json
 
       - name: Install dependencies
         run: npm ci
 
-      - name: Bundle OpenAPI
-        run: npx redocly bundle openapi.yaml -o openapi-bundled.yaml
+      # =========================
+      # Bundle OpenAPI
+      # =========================
+      - name: Bundle OpenAPI Specification
+        run: npm run bundle:api
 
+      # =========================
+      # Build Docs
+      # =========================
       - name: Build API Documentation
-        run: npx redocly build-docs openapi-bundled.yaml -o api-docs.html
+        run: npm run build:docs
 
-      - name: Prepare deployment folder
+      # =========================
+      # Prepare GitHub Pages
+      # =========================
+      - name: Prepare Deployment Folder
         run: |
           mkdir -p _site
           cp api-docs.html _site/index.html
 
-      - name: Upload artifact for GitHub Pages
+      # =========================
+      # Upload GitHub Pages Artifact
+      # =========================
+      - name: Upload Pages Artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: '_site'
+          path: _site
 
+      # =========================
+      # Deploy GitHub Pages
+      # =========================
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4

@@ -4,7 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint:api": "spectral lint openapi.yaml --ruleset .spectral.yaml",
+    "validate:api": "redocly lint openapi.yaml",
+    "bundle:api": "redocly bundle openapi.yaml -o openapi-bundled.yaml",
+    "build:docs": "redocly build-docs openapi-bundled.yaml -o api-docs.html"
   },
   "repository": {
     "type": "git",
