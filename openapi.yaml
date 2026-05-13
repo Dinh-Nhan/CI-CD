@@ -1,74 +1,34 @@
-openapi: 3.1.0
+openapi: "3.0.3"
 info:
-  title: Bookmark API
-  description: |
-    API quản lý bookmark (CRUD, search, filter, pagination).
-
-    ## Authentication
-    Tất cả endpoint đều yêu cầu Bearer JWT token.
-    Để public một endpoint (ví dụ health check), override `security: []` ở operation level.
-
-    ## Conventions
-    - `operationId` theo pattern: `{verb}{Noun}` (ví dụ `listBookmarks`, `createBookmark`)
-    - Lỗi server (5xx) luôn kèm `trace_id` để phục vụ debug
-    - `PATCH` chỉ cập nhật các field được gửi lên; field không gửi sẽ giữ nguyên
-  version: 1.0.0
+  title: PA Vietnam Support API
+  version: "1.0.0"
+  description:  API cho hệ thống ticket hỗ trợ khách hàng
   contact:
-    name: Đinh Nhân
-    email: api@example.com
-  license:
-    name: MIT
-    identifier: MIT
-    url: https://opensource.org/licenses/MIT
+    name: PA Vietnam
+    email: dev@pavietnam.vn
 
 servers:
-  - url: https://api.yourdomain.com
+  - url: https://apigateway.pavietnam.vn
     description: Production
-  - url: https://staging-api.yourdomain.com
-    description: Staging
-
-security:
-  - BearerAuth: []
 
 tags:
-  - name: Bookmark
-    description: Quản lý bookmark
+  - name: Ticket
+    description: Các API liên quan đến ticket hỗ trợ khách hàng
 
-paths:
-  /bookmarks:
-    $ref: './paths/bookmarks.yaml'
-  /bookmarks/{id}:
-    $ref: './paths/bookmarks_{id}.yaml'
+security:
+  - bearerAuth: []
 
 components:
   securitySchemes:
-    BearerAuth:
+    bearerAuth:
       type: http
       scheme: bearer
       bearerFormat: JWT
 
-  schemas:
-    Bookmark:
-      $ref: './components/schemas/Bookmark.yaml'
-    CreateBookmarkRequest:
-      $ref: './components/schemas/CreateBookmarkRequest.yaml'
-    UpdateBookmarkRequest:
-      $ref: './components/schemas/UpdateBookmarkRequest.yaml'
-    ApiResponseBookmark:
-      $ref: './components/schemas/ApiResponseBookmark.yaml'
-    PaginatedBookmarkResponse:
-      $ref: './components/schemas/PaginatedBookmarkResponse.yaml'
-    ErrorResponse:
-      $ref: './components/schemas/ErrorResponse.yaml'
-    ServerErrorResponse:
-      $ref: './components/schemas/ServerErrorResponse.yaml'
-
-  responses:
-    Unauthorized:
-      $ref: './components/responses/Unauthorized.yaml'
-    NotFound:
-      $ref: './components/responses/NotFound.yaml'
-    UnprocessableEntity:
-      $ref: './components/responses/UnprocessableEntity.yaml'
-    InternalServerError:
-      $ref: './components/responses/InternalServerError.yaml'
+paths:
+  /v1/users/{user_id}/tickets:
+    $ref: "./paths/tickets/create.yaml"
+  /v1/users/{user_id}/tickets/{id}:
+    $ref: "./paths/tickets/detail.yaml"
+  /v1/users/{user_id}/tickets/{id}/close:
+    $ref: "./paths/tickets/close.yaml"

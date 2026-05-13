@@ -1,5 +1,0 @@
-allOf:
-  - $ref: './ErrorResponse.yaml'
-  - type: object
-    required: [trace_id]
-    description: Lỗi server luôn kèm trace_id để phục vụ debug

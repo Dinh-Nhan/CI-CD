@@ -1,0 +1,38 @@
+get:
+  summary: Lấy chi tiết ticket
+  operationId: getTicketDetail
+  description: Lấy thông tin chi tiết một ticket bao gồm trạng thái, phòng ban, nhân viên và lịch sử trao đổi.
+  tags:
+    - Ticket
+  security:
+    - bearerAuth: []
+  parameters:
+    - name: user_id
+      in: path
+      required: true
+      schema:
+        type: string
+    - name: id
+      in: path
+      required: true
+      schema:
+        type: string
+  responses:
+    "200":
+      description: Lấy chi tiết thành công
+      content:
+        application/json:
+          schema:
+            $ref: "../../components/schemas/_shared/StandardSuccess.yaml"
+    "401":
+      description: 4102 - Token không hợp lệ hoặc đã hết hạn
+      content:
+        application/json:
+          schema:
+            $ref: "../../components/schemas/_shared/StandardError.yaml"
+    "404":
+      description: 4004 - Không tìm thấy ticket
+      content:
+        application/json:
+          schema:
+            $ref: "../../components/schemas/_shared/StandardError.yaml"

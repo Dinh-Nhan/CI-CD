@@ -1,0 +1,18 @@
+type: object
+properties:
+  id:
+    type: integer
+    example: 456
+  description:
+    type: string
+    example: "Vui lòng thử reset password."
+  created_date:
+    type: string
+    format: Y-m-d H:i:s
+    example: "2024-06-01 14:30:00"
+  files:
+    type: array
+    items:
+      $ref: "../shared/FileAttachment.yaml"
+  owner:
+    $ref: "../shared/UserInfo.yaml"

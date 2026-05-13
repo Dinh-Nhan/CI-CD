@@ -1,0 +1,65 @@
+#Endpoint đóng ticket.
+put:
+  summary: "Đóng ticket"
+  operationId: "closeTicket"
+  tags:
+    - "Ticket"
+  security:
+    - bearerAuth: []
+  x-permissions: CHEC_NEWUPDATE
+  parameters:
+    - name: "user_id"
+      in: path
+      required: true
+      description: "UID của người phải trùng với user_id trong token"
+      schema:
+        type: integer
+    - name: id
+      in: path
+      required: true
+      description: "ID của ticket cần đóng"
+      schema:
+        type: integer
+    - name: X-Request-Id
+      in: header
+      required: false
+      description: "Trace request ID để hỗ trợ debug"
+      schema:
+        type: string
+  responses:
+    "200":
+      description: "Đóng ticket thành công"
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: "#/components/schemas/_shared/StandardSuccess"
+              - type: object
+                properties:
+                  data: 
+                    nullable: true
+                    example: null
+    "401":
+      description: "4102 - Token không hợp lệ hoặc đã hết hạn"
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/_shared/StandardError.yaml"
+    "403":
+      description: "4108 - Không có quyền truy cập"
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/_shared/StandardError.yaml"
+    "404":
+      description: "4004 - Không tìm thấy ticket"
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/_shared/StandardError.yaml"
+    "422":
+      description: "4200 - Dữ liệu không hợp lệ, 4463 - Tạo ticket thất bại, 4466 - Quá thời hạn mở lại, 4467 - Câu hỏi đang được mở, 4469 - Ticket chưa được hoàn thành."
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/_shared/StandardError.yaml"

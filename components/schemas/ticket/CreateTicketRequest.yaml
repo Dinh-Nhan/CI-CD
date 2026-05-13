@@ -1,0 +1,34 @@
+#Request body tạo ticket mới.
+type: object
+required:
+  - department_id
+  - service_id
+  - title
+  - description
+properties:
+  department_id:
+    type: integer
+    description: "ID của phòng ban muốn tạo ticket"
+    example: 3
+  service_id:
+    type: integer
+    description: "ID của dịch vụ muốn tạo ticket"
+    example: 101
+  title:
+    type: string
+    description: "Tiêu đề của ticket"
+    example: "Lỗi không thể đăng nhập"
+  description:
+    type: string
+    maxLength: 4000
+    description: "Mô tả chi tiết của ticket"
+    example: "Người dùng không thể đăng nhập vào hệ thống sau khi cập nhật phần mềm."
+  files:
+    type: array
+    description: >
+      Tệp đính kèm (Không bắt buộc). Tối đa 3 file, mỗi file tối đa 10MB.
+      Định dạng chấp nhận: .gif, .jpg, .jpeg, .png, .svg, .bmp, .pdf, .zip, .rar
+    maxItems: 3
+    items:
+      type: string
+      format: binary

@@ -1,0 +1,56 @@
+type: object
+properties:
+  id:
+    type: integer
+    example: 456
+  title:
+    type: string
+    example: "Không truy cập được Hosting"
+  description:
+    type: string
+    example: "Tôi không thể đăng nhập vào tài khoản của mình."
+  code:
+    type: string
+    description: Mã ticket hiển thị
+    example: "TK-20240601-0001"
+  create_date:
+    type: string
+    format: Y-m-d H:i:s
+    description: Định dạng y-m-d H:i:s
+    example: "2024-06-01 14:30:00"
+  trangthai:
+    type: string
+    description: Trạng thái của ticket
+    enum:
+      - CREATED
+      - IN_PROGRESS
+      - PENDING
+      - CLOSED
+    example: "IN_PROGRESS"
+  department:
+    type: object
+    properties:
+      id:
+        type: integer
+        example: 3
+      name:
+        type: string
+        example: "Hỗ trợ Hosting"
+  service:
+    type: object
+    properties:
+      id:
+        type: integer
+        example: 101
+      domain:
+        type: string
+        example: "example.com"
+      type:
+        type: string
+        example: "Hosting"
+  assignee:
+    $ref: "../shared/UserInfo.yaml"
+  conversations:
+    type: array
+    items:
+      $ref: "./Conversation.yaml"

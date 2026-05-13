@@ -1,0 +1,38 @@
+put:
+  summary: Đóng ticket hỗ trợ
+  operationId: closeTicket
+  description: Đóng một ticket hỗ trợ. Sau khi đóng khách hàng có thể mở lại trong vòng 2 tháng.
+  tags:
+    - Ticket
+  security:
+    - bearerAuth: []
+  parameters:
+    - name: user_id
+      in: path
+      required: true
+      schema:
+        type: string
+    - name: id
+      in: path
+      required: true
+      schema:
+        type: string
+  responses:
+    "200":
+      description: Đóng ticket thành công
+      content:
+        application/json:
+          schema:
+            $ref: "../../components/schemas/_shared/StandardSuccess.yaml"
+    "401":
+      description: 4102 - Token không hợp lệ hoặc đã hết hạn
+      content:
+        application/json:
+          schema:
+            $ref: "../../components/schemas/_shared/StandardError.yaml"
+    "404":
+      description: 4004 - Không tìm thấy dữ liệu
+      content:
+        application/json:
+          schema:
+            $ref: "../../components/schemas/_shared/StandardError.yaml"

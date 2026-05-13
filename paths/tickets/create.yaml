@@ -1,0 +1,40 @@
+post:
+  summary: Tạo ticket hỗ trợ mới
+  operationId: createTicket
+  description: Tạo một yêu cầu hỗ trợ mới cho khách hàng, hỗ trợ đính kèm file.
+  tags:
+    - Ticket
+  security:
+    - bearerAuth: []
+  parameters:
+    - name: user_id
+      in: path
+      required: true
+      schema:
+        type: string
+      description: UID của khách hàng phải trùng với user_id trong token
+  requestBody:
+    required: true
+    content:
+      multipart/form-data:
+        schema:
+          $ref: "../../components/schemas/ticket/CreateTicketRequest.yaml"
+  responses:
+    "200":
+      description: Tạo ticket thành công
+      content:
+        application/json:
+          schema:
+            $ref: "../../components/schemas/_shared/StandardSuccess.yaml"
+    "401":
+      description: 4102 - Token khong hop le
+      content:
+        application/json:
+          schema:
+            $ref: "../../components/schemas/_shared/StandardError.yaml"
+    "422":
+      description: 4200 - Dữ liệu request không hợp lệ 4462 - Tạo yêu cầu thất bại
+      content:
+        application/json:
+          schema:
+            $ref: "../../components/schemas/_shared/StandardError.yaml"

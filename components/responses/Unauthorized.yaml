@@ -1,8 +1,0 @@
-description: Chưa xác thực hoặc token không hợp lệ
-content:
-  application/json:
-    schema:
-      $ref: '../schemas/ErrorResponse.yaml'
-    example:
-      code: UNAUTHORIZED
-      message: "Token không hợp lệ hoặc đã hết hạn"
