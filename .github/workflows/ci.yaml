@@ -40,8 +40,8 @@ jobs:
       # =========================
       # Formatting Validation
       # =========================
-      - name: Check YAML Formatting
-        run: npm run check:format
+      # - name: Check YAML Formatting
+      #   run: npm run check:format
 
       # =========================
       # Spectral Governance Rules

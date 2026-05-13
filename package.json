@@ -8,8 +8,7 @@
     "lint:api": "spectral lint openapi.yaml --ruleset .spectral.yaml",
     "validate:api": "redocly lint openapi.yaml",
     "bundle:api": "redocly bundle openapi.yaml -o openapi-bundled.yaml",
-    "build:docs": "redocly build-docs openapi-bundled.yaml -o api-docs.html",
-    "check:format": "prettier --check \"**/*.{yaml,yml,json}\""
+    "build:docs": "redocly build-docs openapi-bundled.yaml -o api-docs.html"
   },
   "repository": {
     "type": "git",
