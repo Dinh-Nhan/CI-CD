@@ -25,4 +25,4 @@ jobs:
         run: |
           oasdiff breaking old/openapi.yaml new/openapi.yaml > result.txt 2>&1 || true
           echo "output=$(cat result.txt)" >> $GITHUB_OUTPUT
-          oasdiff breaking old/openapi.yaml new/openapi.yaml --fail-on-warnings
+          oasdiff breaking old/openapi.yaml new/openapi.yaml --format githubactions -o WARN
