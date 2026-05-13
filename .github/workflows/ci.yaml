@@ -13,11 +13,11 @@ permissions:
 
 jobs:
   validate:
-    uses: ./.github/workflows/validate.yml
+    uses: ./.github/workflows/validate.yaml
 
   diff:
     needs: validate
-    uses: ./.github/workflows/diff.yml
+    uses: ./.github/workflows/diff.yaml
 
   build:
     needs: [validate, diff]
