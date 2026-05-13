@@ -1,0 +1,28 @@
+name: Check API Differences
+
+on:
+  workflow_call:
+
+jobs:
+  diff:
+    name: Check API Differences
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+        with: { path: new }
+
+      - uses: actions/checkout@v4
+        with: { ref: main, path: old }
+
+      - name: Install oasdiff
+        run: curl -fsSL https://raw.githubusercontent.com/tufin/oasdiff/main/install.sh | sh
+
+      - name: Check breaking changes
+        id: diff
+        run: |
+          oasdiff breaking old/openapi.yaml new/openapi.yaml > result.txt 2>&1 || true
+          echo "output=$(cat result.txt)" >> $GITHUB_OUTPUT
+          oasdiff breaking old/openapi.yaml new/openapi.yaml --format githubactions -o WARN
