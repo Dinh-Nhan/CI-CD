@@ -17,12 +17,24 @@ jobs:
       - uses: actions/checkout@v4
         with: { ref: main, path: old }
 
+      - name: Cache oasdiff
+        uses: actions/cache@v4
+        with:
+          path: /usr/local/bin/oasdiff
+          key: oasdiff-${{ runner.os }}-v1.10.x
+
       - name: Install oasdiff
-        run: curl -fsSL https://raw.githubusercontent.com/tufin/oasdiff/main/install.sh | sh
+        run: |
+          if ! command -v oasdiff &> /dev/null; then
+            curl -fsSL https://github.com/tufin/oasdiff/releases/latest/download/oasdiff_linux_amd64.tar.gz | tar -xz
+            sudo mv oasdiff /usr/local/bin/
+          fi
 
       - name: Check breaking changes
         id: diff
         run: |
           oasdiff breaking old/openapi.yaml new/openapi.yaml > result.txt 2>&1 || true
-          echo "output=$(cat result.txt)" >> $GITHUB_OUTPUT
+          echo "output<<EOF" >> $GITHUB_OUTPUT
+          cat result.txt >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
           oasdiff breaking old/openapi.yaml new/openapi.yaml --format githubactions -o WARN

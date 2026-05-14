@@ -90,7 +90,7 @@ jobs:
       - name: Lấy danh sách schema files thay đổi
         id: changed
         run: |
-          FILES=$(echo '${{ toJSON(github.event.commits[0].modified) }}' | jq -r '.[]' | grep '^components/schemas/' | sed 's/^/• /' | paste -sd '\n')
+          FILES=$(echo '${{ toJSON(github.event.commits) }}' | jq -r '.[].modified[]' | grep '^components/schemas/' | sort -u | sed 's/^/• /' | paste -sd '\n')
           echo "files<<EOF" >> $GITHUB_OUTPUT
           echo "${FILES:-_(không có)_}" >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
