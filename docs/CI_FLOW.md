@@ -2,87 +2,71 @@
 
 ## 📊 Quy trình tự động khi tạo PR
 
+## 🔄 Pull Request Validation Pipeline
+
+```mermaid
+flowchart TD
+    A[Developer creates Pull Request] --> B[GitHub Actions - ci.yaml]
+
+    B --> C[Validate OpenAPI]
+
+    C --> C1[Checkout repository]
+    C --> C2[Setup Node.js 20]
+    C --> C3[Install dependencies]
+    C --> C4[Run Spectral lint]
+    C --> C5[Run Redocly validation]
+
+    C4 --> D{Validation Result}
+
+    D -->|PASS| E[Generate API Diff]
+    E --> F[Build Documentation]
+    F --> G[Upload Build Artifact]
+    G --> H[PR Ready to Merge ✅]
+
+    D -->|FAIL| I[PR Blocked ❌]
+    I --> J[Developer fixes issues]
 ```
-┌─────────────────────────────────────────────────────────────┐
-│  Developer tạo PR vào main/develop                          │
-└─────────────────────┬───────────────────────────────────────┘
-                      │
-                      ▼
-┌─────────────────────────────────────────────────────────────┐
-│  GitHub Actions: ci.yaml                                     │
-│  Trigger: pull_request                                       │
-└─────────────────────┬───────────────────────────────────────┘
-                      │
-                      ▼
-┌─────────────────────────────────────────────────────────────┐
-│  Job 1: Validate (validate.yaml)                            │
-├─────────────────────────────────────────────────────────────┤
-│  1. Checkout code                                            │
-│  2. Setup Node.js 20                                         │
-│  3. npm ci                                                   │
-│  4. npm run lint:api                                         │
-│     ├─ Step 1: Check inline schema (bash)                   │
-│     │  └─ grep patterns trong paths/                        │
-│     └─ Step 2: Spectral validation                          │
-│        └─ operationId, readOnly, responses                  │
-│  5. npm run validate:api (Redocly)                          │
-└─────────────────────┬───────────────────────────────────────┘
-                      │
-                      ├─ PASS ✅
-                      │    │
-                      │    ▼
-                      │  ┌──────────────────────────────────┐
-                      │  │  Job 2: Diff (diff.yaml)         │
-                      │  │  - So sánh thay đổi              │
-                      │  │  - Comment vào PR                │
-                      │  └────────┬─────────────────────────┘
-                      │           │
-                      │           ▼
-                      │  ┌──────────────────────────────────┐
-                      │  │  Job 3: Build (build.yaml)       │
-                      │  │  - Bundle OpenAPI                │
-                      │  │  - Build docs HTML               │
-                      │  │  - Upload artifact               │
-                      │  └────────┬─────────────────────────┘
-                      │           │
-                      │           ▼
-                      │  ┌──────────────────────────────────┐
-                      │  │  ✅ PR ready to merge            │
-                      │  └──────────────────────────────────┘
-                      │
-                      └─ FAIL ❌
-                           │
-                           ▼
-                      ┌──────────────────────────────────┐
-                      │  ❌ PR blocked                    │
-                      │  - Show errors in Actions        │
-                      │  - Developer phải sửa            │
-                      └──────────────────────────────────┘
-```
+
+---
+## 📋 Chi tiết Pipeline
+
+| Bước | Mô tả |
+|---|---|
+| Checkout | Clone source code từ repository |
+| Setup | Thiết lập môi trường Node.js 20 |
+| Install | Cài đặt dependencies bằng `npm ci` |
+| Inline Schema Check | Kiểm tra schema inline bên trong thư mục `paths/` |
+| Spectral Lint | Kiểm tra `operationId`, `responses`, `readOnly` và các quy tắc đặt tên |
+| Redocly Validate | Kiểm tra cấu trúc và reference của OpenAPI |
+| Diff Check | So sánh thay đổi API và comment trực tiếp vào Pull Request |
+| Build Docs | Sinh OpenAPI bundle và tài liệu HTML |
+| Upload Artifact | Upload artifact build lên GitHub Actions |
 
 ## 🔄 Quy trình sau khi merge
 
+```mermaid
+flowchart TD
+    A[Pull Request merged into main] --> B[GitHub Actions: deploy.yaml]
+
+    B --> C[Validate OpenAPI Specification]
+    C --> D[Build API Documentation]
+    D --> E[Deploy to GitHub Pages]
+    E --> F[Send Slack Notification]
 ```
-┌─────────────────────────────────────────────────────────────┐
-│  PR được merge vào main                                      │
-└─────────────────────┬───────────────────────────────────────┘
-                      │
-                      ▼
-┌─────────────────────────────────────────────────────────────┐
-│  GitHub Actions: deploy.yaml                                 │
-│  Trigger: push to main                                       │
-└─────────────────────┬───────────────────────────────────────┘
-                      │
-                      ├─ Job 1: Validate (lại)
-                      │
-                      ├─ Job 2: Build docs
-                      │  └─ redocly build-docs
-                      │
-                      ├─ Job 3: Deploy to GitHub Pages
-                      │  └─ https://<user>.github.io/<repo>/
-                      │
-                      └─ Job 4: Notify Slack
-                         └─ Gửi thông báo thành công
+
+### Workflow Details
+
+| Stage | Description |
+|---|---|
+| Validate | Kiểm tra lại OpenAPI specification bằng Spectral và Redocly |
+| Build Docs | Sinh tài liệu API tự động với `redocly build-docs` |
+| Deploy | Deploy documentation lên GitHub Pages |
+| Notify | Gửi thông báo deploy thành công qua Slack |
+
+### Deployment URL
+
+```txt
+https://<user>.github.io/<repo>/
 ```
 
 ## ⚡ Timeline ước tính
@@ -142,10 +126,3 @@ npm run lint:spectral
 # Chỉ Redocly
 npm run validate:api
 ```
-
-## 📞 Liên hệ
-
-Nếu gặp vấn đề với CI/CD, liên hệ:
-- Team Lead: @team-lead
-- DevOps: @devops-team
-- Slack: #api-governance
