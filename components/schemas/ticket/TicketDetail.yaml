@@ -28,26 +28,9 @@ properties:
       - CLOSED
     example: "IN_PROGRESS"
   department:
-    type: object
-    properties:
-      id:
-        type: integer
-        example: 3
-      name:
-        type: string
-        example: "Hỗ trợ Hosting"
+    $ref: "../shared/Department.yaml"
   service:
-    type: object
-    properties:
-      id:
-        type: integer
-        example: 101
-      domain:
-        type: string
-        example: "example.com"
-      type:
-        type: string
-        example: "Hosting"
+    $ref: "../shared/Service.yaml"
   assignee:
     $ref: "../shared/UserInfo.yaml"
   conversations:

@@ -2,6 +2,10 @@ name: Validate OpenAPI Specification
 
 on:
   workflow_call:
+  push:
+    branches: [main, develop]
+    paths:
+      - "components/schemas/**"   # chỉ trigger khi schema thay đổi
 
 jobs:
   validate:
@@ -30,3 +34,69 @@ jobs:
 
       - name: Run Redocly Validation
         run: npm run validate:api
+
+  # ── Slack Notification ────────────────────────────────────────────
+  notify:
+    name: Notify Slack
+    runs-on: ubuntu-latest
+    needs: validate
+    if: always()
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Lấy danh sách schema files thay đổi
+        id: changed
+        run: |
+          FILES=$(git diff --name-only HEAD~1 HEAD -- 'components/schemas/**' \
+            | sed 's/^/• /' | tr '\n' '\n')
+          echo "files<<EOF" >> $GITHUB_OUTPUT
+          echo "$FILES" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+      - name: Gửi thông báo Slack
+        uses: slackapi/slack-github-action@v1.27.0
+        with:
+          channel-id: ${{ secrets.SLACK_CHANNEL_ID }}
+          payload: |
+            {
+              "blocks": [
+                {
+                  "type": "header",
+                  "text": {
+                    "type": "plain_text",
+                    "text": "${{ needs.validate.result == 'success' && '✅ Schema Update — Passed' || '❌ Schema Update — Failed' }}"
+                  }
+                },
+                {
+                  "type": "section",
+                  "fields": [
+                    { "type": "mrkdwn", "text": "*Repo:*\n${{ github.repository }}" },
+                    { "type": "mrkdwn", "text": "*Branch:*\n`${{ github.ref_name }}`" },
+                    { "type": "mrkdwn", "text": "*Author:*\n${{ github.actor }}" },
+                    { "type": "mrkdwn", "text": "*Commit:*\n`${{ github.sha }}`" }
+                  ]
+                },
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "*Files thay đổi:*\n${{ steps.changed.outputs.files || '_(không có)_' }}"
+                  }
+                },
+                {
+                  "type": "actions",
+                  "elements": [
+                    {
+                      "type": "button",
+                      "text": { "type": "plain_text", "text": "Xem CI Run" },
+                      "url": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+                    }
+                  ]
+                }
+              ]
+            }
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}

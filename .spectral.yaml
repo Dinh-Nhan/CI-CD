@@ -1,2 +1,81 @@
-extends:
-  - spectral:oas
+extends: [[spectral:oas, recommended]]
+
+functionsDir: ".spectral/functions"
+
+rules:
+  # operationId phải verbNoun
+  operation-id-verb-noun:
+    message: >
+      operationId "{{value}}" sai format.
+      Phải theo verbNoun — ví dụ: listUsers, createOrder, deleteItem, closeTicket.
+    severity: error
+    given: "$.paths[*][*].operationId"
+    then:
+      function: pattern
+      functionOptions:
+        match: "^(list|get|create|update|delete|patch|search|upload|send|cancel|approve|close)[A-Z][a-zA-Z0-9]+$"
+
+  # Trường id phải có readOnly: true
+  schema-id-must-be-readonly:
+    message: >
+      Trường "id" trong schema phải có readOnly: true.
+      ID được server tự generate, client không được gửi lên.
+    severity: error
+    given: "$.components.schemas[*].properties.id"
+    then:
+      field: "readOnly"
+      function: truthy
+
+  # Trường created_at phải có readOnly: true
+  schema-created-at-must-be-readonly:
+    message: >
+      Trường "created_at" trong schema phải có readOnly: true.
+      Timestamp được server tự generate, client không được gửi lên.
+    severity: error
+    given: "$.components.schemas[*].properties.created_at"
+    then:
+      field: "readOnly"
+      function: truthy
+
+  # Trường updated_at phải có readOnly: true
+  schema-updated-at-must-be-readonly:
+    message: >
+      Trường "updated_at" trong schema phải có readOnly: true.
+      Timestamp được server tự generate, client không được gửi lên.
+    severity: error
+    given: "$.components.schemas[*].properties.updated_at"
+    then:
+      field: "readOnly"
+      function: truthy
+
+  # Mọi operation phải có response 401 (Unauthorized)
+  operation-must-have-401:
+    message: >
+      Operation thiếu response 401 (Unauthorized).
+      API yêu cầu authentication nên phải có response 401.
+    severity: warn
+    given: "$.paths[*][*]"
+    then:
+      field: "responses.401"
+      function: truthy
+
+  # Mọi operation phải có response 500 (Internal Server Error)
+  operation-must-have-500:
+    message: >
+      Operation thiếu response 500 (Internal Server Error).
+      Mọi API đều có thể gặp lỗi server, nên phải khai báo response 500.
+    severity: warn
+    given: "$.paths[*][*]"
+    then:
+      field: "responses.500"
+      function: truthy
+
+  # Mọi operation phải có response 404 cho GET/PUT/PATCH/DELETE với path parameter
+  operation-with-id-must-have-404:
+    message: >
+      Operation với path parameter (/{id}) phải có response 404 (Not Found).
+    severity: warn
+    given: "$.paths[*~/{id}][get,put,patch,delete]"
+    then:
+      field: "responses.404"
+      function: truthy
