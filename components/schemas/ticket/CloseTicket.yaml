@@ -1,4 +1,4 @@
-#Endpoint đóng ticket.
+# Endpoint đóng ticket.
 put:
   summary: "Đóng ticket"
   operationId: "closeTicket"
@@ -6,7 +6,7 @@ put:
     - "Ticket"
   security:
     - bearerAuth: []
-  x-permissions: CHEC_NEWUPDATE
+  x-permissions: CHECK_NEWUPDATE
   parameters:
     - name: "user_id"
       in: path
@@ -33,33 +33,33 @@ put:
         application/json:
           schema:
             allOf:
-              - $ref: "#/components/schemas/_shared/StandardSuccess"
+              - $ref: "../../components/schemas/core/StandardSuccess.yaml"
               - type: object
                 properties:
-                  data: 
-                    nullable: true
+                  data:
+                    type: ["null"]
                     example: null
     "401":
       description: "4102 - Token không hợp lệ hoặc đã hết hạn"
       content:
         application/json:
           schema:
-            $ref: "#/components/schemas/_shared/StandardError.yaml"
+            $ref: "../../components/schemas/core/StandardError.yaml"
     "403":
       description: "4108 - Không có quyền truy cập"
       content:
         application/json:
           schema:
-            $ref: "#/components/schemas/_shared/StandardError.yaml"
+            $ref: "../../components/schemas/core/StandardError.yaml"
     "404":
       description: "4004 - Không tìm thấy ticket"
       content:
         application/json:
           schema:
-            $ref: "#/components/schemas/_shared/StandardError.yaml"
+            $ref: "../../components/schemas/core/StandardError.yaml"
     "422":
       description: "4200 - Dữ liệu không hợp lệ, 4463 - Tạo ticket thất bại, 4466 - Quá thời hạn mở lại, 4467 - Câu hỏi đang được mở, 4469 - Ticket chưa được hoàn thành."
       content:
         application/json:
           schema:
-            $ref: "#/components/schemas/_shared/StandardError.yaml"
+            $ref: "../../components/schemas/core/StandardError.yaml"

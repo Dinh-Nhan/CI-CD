@@ -25,16 +25,16 @@ post:
       content:
         application/json:
           schema:
-            $ref: "../../components/schemas/_shared/StandardSuccess.yaml"
+            $ref: "../../components/schemas/core/StandardSuccess.yaml"
     "401":
       description: 4102 - Token khong hop le
       content:
         application/json:
           schema:
-            $ref: "../../components/schemas/_shared/StandardError.yaml"
+            $ref: "../../components/schemas/core/StandardError.yaml"
     "422":
       description: 4200 - Dữ liệu request không hợp lệ 4462 - Tạo yêu cầu thất bại
       content:
         application/json:
           schema:
-            $ref: "../../components/schemas/_shared/StandardError.yaml"
+            $ref: "../../components/schemas/core/StandardError.yaml"

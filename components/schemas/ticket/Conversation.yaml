@@ -13,6 +13,6 @@ properties:
   files:
     type: array
     items:
-      $ref: "../shared/FileAttachment.yaml"
+      $ref: "../common/FileAttachment.yaml"
   owner:
-    $ref: "../shared/UserInfo.yaml"
+    $ref: "../common/UserInfo.yaml"
