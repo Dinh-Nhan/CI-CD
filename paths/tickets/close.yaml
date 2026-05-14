@@ -23,21 +23,21 @@ put:
       content:
         application/json:
           schema:
-          type: object
-          required:
-            - success
-            - error
-            - data
-          properties:
-            success:
-              type: boolean
-              example: true
-            error:
-              type: ["null"]
-              example: null
-            data:
-              description: "Dữ liệu trả về tuỳ vào từng endpoint khác nhau"
-            # $ref: "../../components/schemas/core/StandardSuccess.yaml"
+            $ref: "../../components/schemas/core/StandardSuccess.yaml"
+            # type: object
+            # required:
+            #   - success
+            #   - error
+            #   - data
+            # properties:
+            #   success:
+            #     type: boolean
+            #     example: true
+            #   error:
+            #     type: ["null"]
+            #     example: null
+            #   data:
+            #     description: "Dữ liệu trả về tuỳ vào từng endpoint khác nhau"
     "401":
       description: 4102 - Token không hợp lệ hoặc đã hết hạn
       content:
