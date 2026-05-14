@@ -25,5 +25,5 @@ properties:
       message:
         type: string
         example: "Dữ liệu không hợp lệ"
-      data:
-        type: ["object", "null"]
+  data:
+    type: ["object", "null"]
