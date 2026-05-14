@@ -1,0 +1,17 @@
+# Chi tiết lỗi được trả về trong StandardError
+type: object
+required:
+  - code
+  - message
+properties:
+  code:
+    type: integer
+    description: "Mã lỗi nội bộ của hệ thống"
+    example: 4200
+  message:
+    type: string
+    description: "Mô tả lỗi"
+    example: "Dữ liệu không hợp lệ"
+  data:
+    type: ["object", "null"]
+    description: "Dữ liệu bổ sung về lỗi (nếu có)"
