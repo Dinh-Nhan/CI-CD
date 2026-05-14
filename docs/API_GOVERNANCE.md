@@ -2,7 +2,7 @@
 
 ## 🎯 Mục đích
 
-Đảm bảo tất cả API specs tuân thủ chuẩn OpenAPI 3.1 và conventions của team.
+Đảm bảo tất cả API specs tuân thủ chuẩn OpenAPI 3.0 và conventions của team.
 
 ## 🔍 Các rules được kiểm tra
 

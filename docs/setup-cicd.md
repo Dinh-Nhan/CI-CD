@@ -1,6 +1,6 @@
 # Hướng Dẫn CI/CD — API Schema Workflow
 
-> Tài liệu này dành cho toàn bộ team, bao gồm dev mới chưa quen với CI/CD lẫn dev đã có kinh nghiệm.  
+> Tài liệu này dành cho toàn bộ team, bao gồm dev mới chưa quen với CI/CD lẫn dev đã có kinh nghiệm.
 > Cập nhật lần cuối: 14/05/2026
 
 ---
@@ -19,14 +19,21 @@
 
 ## 1. Tổng quan hệ thống
 
-```
-Local machine                  GitHub                     Slack
-─────────────────              ────────────────           ──────────────
-Viết schema          push →   GitHub Actions CI   →      #api-dev-log
-  ↓                           ├── Naming check              ✅ or ❌
-Spectral lint (local)         ├── Spectral lint
-  ↓                           └── Redocly validate
-Commit + Push
+```mermaid
+flowchart LR
+    A[Local Machine] --> B[GitHub Actions CI]
+    B --> C[Slack Notification]
+
+    A --> A1[Viết schema]
+    A1 --> A2[Chạy Spectral lint local]
+    A2 --> A3[Commit và Push]
+
+    B --> B1[Naming convention check]
+    B --> B2[Spectral lint]
+    B --> B3[Redocly validate]
+
+    C --> C1[#api-dev-log]
+    C1 --> C2[Thông báo thành công hoặc thất bại]
 ```
 
 Hệ thống có **2 tầng bảo vệ**:
@@ -273,22 +280,22 @@ Message màu đỏ + tiêu đề `❌ Schema Update — Failed` nghĩa là CI fa
 
 ## 7. Câu hỏi thường gặp
 
-**Q: Tôi push lên nhưng CI không chạy?**  
+**Q: Tôi push lên nhưng CI không chạy?**
 A: CI chỉ trigger khi có thay đổi trong `components/schemas/**`, `**/*.yaml`, hoặc `**/*.yml`. Nếu chỉ sửa file khác (ví dụ `README.md`) thì CI không chạy — đây là cố ý để tránh tốn CI minutes.
 
-**Q: Warning có cần fix không?**  
+**Q: Warning có cần fix không?**
 A: Warning không block merge nhưng phải fix trước khi PR được approve. Các warning hiện tại: thiếu `401`, thiếu `500`, thiếu `404` cho path có `{id}`.
 
-**Q: Tôi đổi tên schema file thì phải làm gì?**  
+**Q: Tôi đổi tên schema file thì phải làm gì?**
 A: Đổi tên file → tìm tất cả `$ref` trỏ đến file cũ và cập nhật. Dùng lệnh:
 ```bash
 grep -r "OldFileName" --include="*.yaml" .
 ```
 
-**Q: Sao tôi lint local thì pass nhưng CI lại fail?**  
+**Q: Sao tôi lint local thì pass nhưng CI lại fail?**
 A: Thường do thiếu `npm ci` — dependencies local và CI có thể khác nhau. Chạy `npm ci` rồi lint lại.
 
-**Q: Schema file của tôi nằm đúng `components/schemas/` nhưng vẫn bị báo lỗi naming?**  
+**Q: Schema file của tôi nằm đúng `components/schemas/` nhưng vẫn bị báo lỗi naming?**
 A: Kiểm tra **tên file** (không phải thư mục) có đúng PascalCase không. Ví dụ: `components/schemas/ticket/createRequest.yaml` → sai, phải là `CreateRequest.yaml`.
 
 ---

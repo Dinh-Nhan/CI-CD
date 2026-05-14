@@ -2,8 +2,13 @@ name: API Deploy
 
 on:
   push:
-    branches:
-      - main
+    branches: [main, develop]
+    paths:
+      - "components/**"
+      - "paths/**"
+      - "openapi.yaml"
+      - ".spectral.yaml"
+      - "scripts/lint-all.sh"
 
 concurrency:
   group: deploy-${{ github.ref }}
@@ -72,3 +77,62 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+
+  notify:
+    name: Notify Slack
+    runs-on: ubuntu-latest
+    needs: deploy
+    if: always()
+    env:
+      SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+      SLACK_CHANNEL_ID: ${{ secrets.SLACK_CHANNEL_ID }}
+    steps:
+      - name: Lấy danh sách schema files thay đổi
+        id: changed
+        run: |
+          FILES=$(echo '${{ toJSON(github.event.commits) }}' | jq -r '.[].modified[]' | grep '^components/schemas/' | sort -u | sed 's/^/• /' | paste -sd '\n')
+          echo "files<<EOF" >> $GITHUB_OUTPUT
+          echo "${FILES:-_(không có)_}" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+      - name: Gửi thông báo Slack
+        run: |
+          if [ "${{ needs.deploy.result }}" = "success" ]; then
+            TITLE="✅ Deploy — Passed"
+          else
+            TITLE="❌ Deploy — Failed"
+          fi
+
+          curl -X POST https://slack.com/api/chat.postMessage \
+            -H "Authorization: Bearer ${SLACK_BOT_TOKEN}" \
+            -H "Content-Type: application/json; charset=utf-8" \
+            -d "{
+              \"channel\": \"${SLACK_CHANNEL_ID}\",
+              \"text\": \"${TITLE}\",
+              \"blocks\": [
+                {
+                  \"type\": \"header\",
+                  \"text\": { \"type\": \"plain_text\", \"text\": \"${TITLE}\" }
+                },
+                {
+                  \"type\": \"section\",
+                  \"fields\": [
+                    { \"type\": \"mrkdwn\", \"text\": \"*Repo:*\n${{ github.repository }}\" },
+                    { \"type\": \"mrkdwn\", \"text\": \"*Branch:*\n\`${{ github.ref_name }}\`\" },
+                    { \"type\": \"mrkdwn\", \"text\": \"*Author:*\n${{ github.actor }}\" },
+                    { \"type\": \"mrkdwn\", \"text\": \"*Commit:*\n\`${{ github.sha }}\`\" },
+                    { \"type\": \"mrkdwn\", \"text\": \"*Files changed:*\n${{ steps.changed.outputs.files }}\" }
+                  ]
+                },
+                {
+                  \"type\": \"actions\",
+                  \"elements\": [
+                    {
+                      \"type\": \"button\",
+                      \"text\": { \"type\": \"plain_text\", \"text\": \"Xem CI Run\" },
+                      \"url\": \"${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}\"
+                    }
+                  ]
+                }
+              ]
+            }"
