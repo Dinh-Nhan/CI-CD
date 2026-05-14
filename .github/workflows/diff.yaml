@@ -21,12 +21,12 @@ jobs:
         uses: actions/cache@v4
         with:
           path: /usr/local/bin/oasdiff
-          key: oasdiff-${{ runner.os }}-v1.10.x
+          key: oasdiff-${{ runner.os }}-v1.10.27
 
       - name: Install oasdiff
         run: |
           if ! command -v oasdiff &> /dev/null; then
-            curl -fsSL https://github.com/tufin/oasdiff/releases/latest/download/oasdiff_linux_amd64.tar.gz | tar -xz
+            curl -fsSL https://github.com/oasdiff/oasdiff/releases/download/v1.10.27/oasdiff_1.10.27_linux_amd64.tar.gz | tar -xz
             sudo mv oasdiff /usr/local/bin/
           fi
 
