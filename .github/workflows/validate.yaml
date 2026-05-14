@@ -56,6 +56,11 @@ jobs:
           echo "${FILES:-_(không có)_}" >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
 
+      - name: Debug token
+        run: |
+          echo "Token length: ${#SLACK_BOT_TOKEN}"
+          echo "Channel: ${SLACK_CHANNEL_ID}"
+
       - name: Gửi thông báo Slack
         run: |
           if [ "${{ needs.validate.result }}" = "success" ]; then
