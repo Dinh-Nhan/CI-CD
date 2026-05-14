@@ -29,10 +29,10 @@ get:
       content:
         application/json:
           schema:
-            $ref: "../../components/schemas/core/StandardError.yaml"
+            $ref: "../../components/responses/Unauthorized.yaml"
     "404":
       description: 4004 - Không tìm thấy ticket
       content:
         application/json:
           schema:
-            $ref: "../../components/schemas/core/StandardError.yaml"
+            $ref: "../../components/responses/NotFound.yaml"

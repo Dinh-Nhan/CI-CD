@@ -1,4 +1,4 @@
-openapi: "3.0.0"
+openapi: "3.1.0"
 info:
   title: PA Vietnam Support API
   version: "1.0.0"
@@ -27,8 +27,8 @@ components:
 
 paths:
   /v1/users/{user_id}/tickets:
-    $ref: "./paths/tickets/create.yaml"
+      $ref: "./paths/tickets/create.yaml"
   /v1/users/{user_id}/tickets/{id}:
-    $ref: "./paths/tickets/detail.yaml"
+      $ref: "./paths/tickets/detail.yaml"
   /v1/users/{user_id}/tickets/{id}/close:
-    $ref: "./paths/tickets/close.yaml"
+      $ref: "./paths/tickets/close.yaml"
