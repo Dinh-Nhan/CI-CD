@@ -3,6 +3,9 @@ extends: [[spectral:oas, recommended]]
 functionsDir: ".spectral/functions"
 
 rules:
+  # Rule no-inline-schema đã tắt vì được check bằng script riêng
+  # Xem scripts/lint-all.sh
+
   # operationId phải verbNoun
   operation-id-verb-noun:
     message: >

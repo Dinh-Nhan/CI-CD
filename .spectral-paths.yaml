@@ -1,0 +1,27 @@
+# Ruleset cho paths - kiểm tra inline schema
+# Chạy trực tiếp trên files trong paths/ (không resolve $ref)
+
+extends: []
+
+rules:
+  # Schema trong paths phải dùng $ref
+  no-inline-schema-in-paths:
+    message: >
+      Schema phải dùng $ref trỏ về components/schemas.
+      Không được định nghĩa inline schema trong paths.
+    severity: error
+    given:
+      - "$.*.requestBody.content[*].schema"
+      - "$.*.responses[*].content[*].schema"
+    then:
+      field: "$ref"
+      function: truthy
+
+  # operationId phải có
+  operation-id-required:
+    message: "Operation phải có operationId"
+    severity: error
+    given: "$.*"
+    then:
+      field: "operationId"
+      function: truthy

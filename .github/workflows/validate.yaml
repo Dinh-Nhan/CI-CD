@@ -4,7 +4,11 @@ on:
   push:
     branches: [main, develop]
     paths:
-      - "components/schemas/**"
+      - "components/**"
+      - "paths/**"
+      - "openapi.yaml"
+      - ".spectral.yaml"
+      - "scripts/lint-all.sh"
 
 jobs:
   validate:
