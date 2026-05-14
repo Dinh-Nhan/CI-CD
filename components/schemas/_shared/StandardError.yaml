@@ -10,3 +10,4 @@ properties:
     example: false
   error:
     $ref: './ErrorDetail.yaml'
+# test
