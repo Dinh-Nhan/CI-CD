@@ -44,22 +44,22 @@ put:
       content:
         application/json:
           schema:
-            $ref: "../../components/schemas/core/StandardError.yaml"
+            $ref: "../../responses/Unauthorized.yaml"
     "403":
       description: "4108 - Không có quyền truy cập"
       content:
         application/json:
           schema:
-            $ref: "../../components/schemas/core/StandardError.yaml"
+            $ref: "../../responses/Forbidden.yaml"
     "404":
       description: "4004 - Không tìm thấy ticket"
       content:
         application/json:
           schema:
-            $ref: "../../components/schemas/core/StandardError.yaml"
+            $ref: "../../responses/NotFound.yaml"
     "422":
       description: "4200 - Dữ liệu không hợp lệ, 4463 - Tạo ticket thất bại, 4466 - Quá thời hạn mở lại, 4467 - Câu hỏi đang được mở, 4469 - Ticket chưa được hoàn thành."
       content:
         application/json:
           schema:
-            $ref: "../../components/schemas/core/StandardError.yaml"
+            $ref: "../../responses/ValidationError.yaml"
