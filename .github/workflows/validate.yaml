@@ -1,11 +1,10 @@
 name: Validate OpenAPI Specification
-
 on:
   workflow_call:
   push:
     branches: [main, develop]
     paths:
-      - "components/schemas/**"   # chỉ trigger khi schema thay đổi
+      - "components/schemas/**"
 
 jobs:
   validate:
@@ -35,7 +34,6 @@ jobs:
       - name: Run Redocly Validation
         run: npm run validate:api
 
-  # ── Slack Notification ────────────────────────────────────────────
   notify:
     name: Notify Slack
     runs-on: ubuntu-latest
@@ -57,9 +55,10 @@ jobs:
           echo "EOF" >> $GITHUB_OUTPUT
 
       - name: Gửi thông báo Slack
-        uses: slackapi/slack-github-action@v1.27.0
+        uses: slackapi/slack-github-action@v2.0.0
         with:
           channel-id: ${{ secrets.SLACK_CHANNEL_ID }}
+          token: ${{ secrets.SLACK_BOT_TOKEN }}
           payload: |
             {
               "blocks": [
@@ -98,5 +97,3 @@ jobs:
                 }
               ]
             }
-        env:
-          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
