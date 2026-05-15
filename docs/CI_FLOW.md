@@ -6,7 +6,7 @@
 
 ```mermaid
 flowchart TD
-    A[Developer creates Pull Request] --> B[GitHub Actions - ci.yaml]
+    A[Developer creates Pull Request] --> B[GitHub Actions ci.yaml]
 
     B --> C[Validate OpenAPI]
 
@@ -21,9 +21,9 @@ flowchart TD
     D -->|PASS| E[Generate API Diff]
     E --> F[Build Documentation]
     F --> G[Upload Build Artifact]
-    G --> H[PR Ready to Merge ✅]
+    G --> H[PR Ready to Merge]
 
-    D -->|FAIL| I[PR Blocked ❌]
+    D -->|FAIL| I[PR Blocked]
     I --> J[Developer fixes issues]
 ```
 

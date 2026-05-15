@@ -27,14 +27,6 @@ post:
           schema:
             $ref: "../../components/schemas/core/StandardSuccess.yaml"
     "401":
-      description: 4102 - Token khong hop le
-      content:
-        application/json:
-          schema:
-            $ref: "../../components/responses/Unauthorized.yaml"
+      $ref: "../../components/responses/Unauthorized.yaml"
     "422":
-      description: 4200 - Dữ liệu request không hợp lệ 4462 - Tạo yêu cầu thất bại
-      content:
-        application/json:
-          schema:
-           $ref: "../../components/responses/ValidationError.yaml"
+      $ref: "../../components/responses/ValidationError.yaml"

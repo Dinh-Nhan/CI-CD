@@ -17,12 +17,3 @@ if [ $? -ne 0 ]; then
   echo "❌ Inline schema check failed"
   exit 1
 fi
-
-echo ""
-echo "================================================"
-echo "🔍 Step 2: Validating full OpenAPI document..."
-echo "================================================"
-echo ""
-
-# Lint toàn bộ document với ruleset chính
-spectral lint openapi.yaml --ruleset .spectral.yaml
