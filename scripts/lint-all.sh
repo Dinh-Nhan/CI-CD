@@ -26,6 +26,3 @@ echo ""
 
 # Lint toàn bộ document với ruleset chính
 spectral lint openapi.yaml --ruleset .spectral.yaml
-
-echo ""
-echo "✅ All checks passed!"
