@@ -87,10 +87,15 @@ jobs:
       SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
       SLACK_CHANNEL_ID: ${{ secrets.SLACK_CHANNEL_ID }}
     steps:
-      - name: Lấy danh sách schema files thay đổi
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Lấy danh sách files thay đổi
         id: changed
         run: |
-          FILES=$(echo '${{ toJSON(github.event.commits) }}' | jq -r '.[].modified[]' | grep '^components/schemas/' | sort -u | sed 's/^/• /' | paste -sd '\n')
+          FILES=$(git diff --name-only HEAD~1 HEAD | sort -u | sed 's/^/• /' | paste -sd '\n')
           echo "files<<EOF" >> $GITHUB_OUTPUT
           echo "${FILES:-_(không có)_}" >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
