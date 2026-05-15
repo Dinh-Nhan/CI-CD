@@ -7,13 +7,25 @@
 
 ## Mục lục
 
-1. [Tổng quan hệ thống](#1-tổng-quan-hệ-thống)
-2. [Quy tắc bắt buộc trước khi commit](#2-quy-tắc-bắt-buộc-trước-khi-commit)
-3. [Flow làm việc hàng ngày](#3-flow-làm-việc-hàng-ngày)
-4. [CI chạy gì khi mở PR?](#4-ci-chạy-gì-khi-mở-pr)
-5. [Đọc lỗi Spectral](#5-đọc-lỗi-spectral)
-6. [Slack Notification](#6-slack-notification)
-7. [Câu hỏi thường gặp](#7-câu-hỏi-thường-gặp)
+- [Hướng Dẫn CI/CD — API Schema Workflow](#hướng-dẫn-cicd--api-schema-workflow)
+  - [Mục lục](#mục-lục)
+  - [1. Tổng quan hệ thống](#1-tổng-quan-hệ-thống)
+  - [2. Quy tắc bắt buộc trước khi commit](#2-quy-tắc-bắt-buộc-trước-khi-commit)
+    - [Naming Convention](#naming-convention)
+    - [Schema Rules](#schema-rules)
+  - [3. Flow làm việc hàng ngày](#3-flow-làm-việc-hàng-ngày)
+    - [Bước 1 — Setup lần đầu (chỉ làm 1 lần)](#bước-1--setup-lần-đầu-chỉ-làm-1-lần)
+    - [Bước 2 — Tạo branch mới](#bước-2--tạo-branch-mới)
+    - [Bước 3 — Viết schema và lint local](#bước-3--viết-schema-và-lint-local)
+    - [Bước 4 — Commit đúng format](#bước-4--commit-đúng-format)
+    - [Bước 5 — Push và mở PR](#bước-5--push-và-mở-pr)
+  - [4. CI chạy gì khi mở PR?](#4-ci-chạy-gì-khi-mở-pr)
+    - [Xem kết quả CI](#xem-kết-quả-ci)
+  - [5. Đọc lỗi Spectral](#5-đọc-lỗi-spectral)
+    - [Cấu trúc một dòng lỗi](#cấu-trúc-một-dòng-lỗi)
+    - [Ví dụ thực tế và cách fix](#ví-dụ-thực-tế-và-cách-fix)
+  - [6. Slack Notification](#6-slack-notification)
+  - [7. Câu hỏi thường gặp](#7-câu-hỏi-thường-gặp)
 
 ---
 
@@ -38,10 +50,10 @@ flowchart LR
 
 Hệ thống có **2 tầng bảo vệ**:
 
-| Tầng | Chạy khi nào | Mục đích |
-|------|-------------|----------|
+| Tầng                 | Chạy khi nào   | Mục đích                                |
+| -------------------- | -------------- | --------------------------------------- |
 | Local (Spectral CLI) | Trước khi push | Phát hiện lỗi sớm, không tốn CI minutes |
-| GitHub Actions | Khi mở PR | Gate chính — block merge nếu vi phạm |
+| GitHub Actions       | Khi mở PR      | Gate chính — block merge nếu vi phạm    |
 
 ---
 
@@ -49,13 +61,13 @@ Hệ thống có **2 tầng bảo vệ**:
 
 ### Naming Convention
 
-| Đối tượng | Quy tắc | Ví dụ đúng | Ví dụ sai |
-|-----------|---------|------------|-----------|
-| Schema file | PascalCase | `CreateTicketRequest.yaml` | `create-ticket.yaml` |
-| Path file | kebab-case | `create-ticket.yaml` | `CreateTicket.yaml` |
-| Thư mục schema | `components/schemas/` | `components/schemas/ticket/` | `schemas/ticket/` |
-| `operationId` | verbNoun | `createTicket`, `listUsers` | `create_ticket`, `Tickets` |
-| Commit message | `feat(scope): mô tả` | `feat(schemas): add CreateTicketRequest` | `add schema` |
+| Đối tượng      | Quy tắc               | Ví dụ đúng                               | Ví dụ sai                  |
+| -------------- | --------------------- | ---------------------------------------- | -------------------------- |
+| Schema file    | PascalCase            | `CreateTicketRequest.yaml`               | `create-ticket.yaml`       |
+| Path file      | kebab-case            | `create-ticket.yaml`                     | `CreateTicket.yaml`        |
+| Thư mục schema | `components/schemas/` | `components/schemas/ticket/`             | `schemas/ticket/`          |
+| `operationId`  | verbNoun              | `createTicket`, `listUsers`              | `create_ticket`, `Tickets` |
+| Commit message | `feat(scope): mô tả`  | `feat(schemas): add CreateTicketRequest` | `add schema`               |
 
 ### Schema Rules
 
@@ -139,11 +151,11 @@ git checkout -b feat/schema-ten-feature
 
 Convention đặt tên branch:
 
-| Loại | Pattern | Ví dụ |
-|------|---------|-------|
-| Feature | `feat/schema-*` | `feat/schema-create-ticket` |
-| Fix | `fix/schema-*` | `fix/schema-missing-500` |
-| Chore | `chore/*` | `chore/update-spectral-rules` |
+| Loại    | Pattern         | Ví dụ                         |
+| ------- | --------------- | ----------------------------- |
+| Feature | `feat/schema-*` | `feat/schema-create-ticket`   |
+| Fix     | `fix/schema-*`  | `fix/schema-missing-500`      |
+| Chore   | `chore/*`       | `chore/update-spectral-rules` |
 
 ### Bước 3 — Viết schema và lint local
 
@@ -221,37 +233,47 @@ Job: notify (chạy sau validate, dù pass hay fail)
 ### Ví dụ thực tế và cách fix
 
 **Lỗi 1 — Inline schema**
+
 ```
 paths/tickets/create.yaml
   15:13  error  no-inline-schema-in-paths  Phải dùng $ref, không được inline schema.
 ```
+
 → Chuyển schema định nghĩa tại chỗ ra `components/schemas/` và dùng `$ref`.
 
 **Lỗi 2 — Thiếu response 500**
+
 ```
 paths/tickets/close.yaml
   20:13  warning  operation-must-have-500  Operation thiếu response 500.  put.responses
 ```
+
 → Thêm `500: $ref: "#/components/responses/InternalServerError"` vào `responses`.
 
 **Lỗi 3 — operationId sai format**
+
 ```
 paths/tickets/list.yaml
   5:17  error  operation-id-verb-noun  operationId "tickets_list" sai format.
 ```
+
 → Đổi thành `listTickets`.
 
 **Lỗi 4 — Thiếu readOnly**
+
 ```
 components/schemas/ticket/Ticket.yaml
   12:7  error  schema-id-must-be-readonly  Trường "id" phải có readOnly: true.
 ```
+
 → Thêm `readOnly: true` vào field `id`.
 
 **Lỗi 5 — Tên file sai PascalCase**
+
 ```
 ❌ components/schemas/ticket/create-ticket-request.yaml → tên file phải là PascalCase
 ```
+
 → Đổi tên file thành `CreateTicketRequest.yaml`, cập nhật tất cả `$ref` trỏ đến file này.
 
 ---
@@ -288,6 +310,7 @@ A: Warning không block merge nhưng phải fix trước khi PR được approve
 
 **Q: Tôi đổi tên schema file thì phải làm gì?**
 A: Đổi tên file → tìm tất cả `$ref` trỏ đến file cũ và cập nhật. Dùng lệnh:
+
 ```bash
 grep -r "OldFileName" --include="*.yaml" .
 ```

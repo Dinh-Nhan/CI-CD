@@ -25,10 +25,8 @@ get:
           schema:
             $ref: "../../components/schemas/core/StandardSuccess.yaml"
     "401":
-      $ref: "../../components/responses/Unauthorized.yaml"
+            $ref: "../../components/responses/Unauthorized.yaml"
     "404":
-      # description: 4004 - Không tìm thấy ticket
-      # content:
-      #   application/json:
-      #     schema:
-      $ref: "../../components/responses/NotFound.yaml"
+            $ref: "../../components/responses/NotFound.yaml"
+    "500":
+            $ref: "../../components/responses/InternalError.yaml"

@@ -24,11 +24,12 @@ components:
       type: http
       scheme: bearer
       bearerFormat: JWT
-
 paths:
   /v1/users/{user_id}/tickets:
-      $ref: "./paths/tickets/create.yaml"
+    $ref: "./paths/tickets/create.yaml"
   /v1/users/{user_id}/tickets/{id}:
-      $ref: "./paths/tickets/detail.yaml"
+    $ref: "./paths/tickets/detail.yaml"
   /v1/users/{user_id}/tickets/{id}/close:
-      $ref: "./paths/tickets/close.yaml"
+    $ref: "./paths/tickets/close.yaml"
+  /v1/users/{user_id}/tickets/{id}/reopen:
+    $ref: "./paths/tickets/reopen.yaml"

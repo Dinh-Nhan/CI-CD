@@ -8,5 +8,4 @@ content:
         error:
           code: 4004
           message: "Không tìm thấy dữ liệu"
-          data:
-            - null
+          data: null
