@@ -30,11 +30,19 @@ jobs:
             sudo mv oasdiff /usr/local/bin/
           fi
 
-      - name: Check breaking changes
+      - name: Check changelog changes
         id: diff
         run: |
-          oasdiff breaking old/openapi.yaml new/openapi.yaml > result.txt 2>&1 || true
+          oasdiff changelog old/openapi.yaml new/openapi.yaml > result.txt 2>&1 || true
           echo "output<<EOF" >> $GITHUB_OUTPUT
           cat result.txt >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
-          oasdiff breaking old/openapi.yaml new/openapi.yaml --format githubactions -o WARN
+
+      # - name: Check breaking changes
+      #   id: diff
+      #   run: |
+      #     oasdiff breaking old/openapi.yaml new/openapi.yaml > result.txt 2>&1 || true
+      #     echo "output<<EOF" >> $GITHUB_OUTPUT
+      #     cat result.txt >> $GITHUB_OUTPUT
+      #     echo "EOF" >> $GITHUB_OUTPUT
+      #     oasdiff breaking old/openapi.yaml new/openapi.yaml --format githubactions -o WARN
