@@ -19,6 +19,12 @@
     - [Bước 3 — Viết schema và lint local](#bước-3--viết-schema-và-lint-local)
     - [Bước 4 — Commit đúng format](#bước-4--commit-đúng-format)
     - [Bước 5 — Push và mở PR](#bước-5--push-và-mở-pr)
+  - [PR template](#pr-template)
+    - [📋 Mô tả thay đổi](#-mô-tả-thay-đổi)
+    - [📁 Files thay đổi](#-files-thay-đổi)
+    - [✅ Checklist trước khi request review](#-checklist-trước-khi-request-review)
+    - [🔗 Liên kết liên quan](#-liên-kết-liên-quan)
+    - [💬 Ghi chú cho reviewer](#-ghi-chú-cho-reviewer)
   - [4. CI chạy gì khi mở PR?](#4-ci-chạy-gì-khi-mở-pr)
     - [Xem kết quả CI](#xem-kết-quả-ci)
   - [5. Đọc lỗi Spectral](#5-đọc-lỗi-spectral)
@@ -194,6 +200,36 @@ Mở PR trên GitHub, điền mô tả theo template (xem phần PR bên dưới
 
 ---
 
+## PR template
+**Tiêu đề:** `feat(schemas): <mô tả ngắn gọn>`
+
+### 📋 Mô tả thay đổi
+<!-- Giải thích ngắn gọn bạn thêm/sửa gì và tại sao -->
+
+### 📁 Files thay đổi
+<!-- Liệt kê các file schema liên quan -->
+- `components/schemas/.../XxxYyy.yaml`
+- `paths/.../*.yaml`
+
+### ✅ Checklist trước khi request review
+- [x] Đã chạy `npm run lint:api` local — không còn lỗi `error`
+- [x] Tên file schema đúng **PascalCase**
+- [x] Tên thư mục đúng `components/schemas/<domain>/`
+- [x] `operationId` đúng format **verbNoun** (`createTicket`, `listUsers`…)
+- [x] Response schema dùng `$ref`, không inline
+- [x] Các field server-generated (`id`, `created_at`…) có `readOnly: true`
+- [x] Đủ error responses: `400`, `401`, `500` (và `404` nếu path có `{id}`)
+- [x] Commit message đúng format `feat(scope): mô tả`
+- [x] Đã cập nhật tất cả `$ref` nếu có đổi tên file
+
+### 🔗 Liên kết liên quan
+<!-- Ticket Jira / Linear, tài liệu API, PR liên quan nếu có -->
+- Ticket:
+- Tài liệu:
+
+### 💬 Ghi chú cho reviewer
+<!-- Điểm cần review kỹ, context đặc biệt, hoặc trade-off nếu có -->
+
 ## 4. CI chạy gì khi mở PR?
 
 Khi bạn mở PR vào `main` hoặc `develop`, GitHub Actions tự động chạy workflow `Validate OpenAPI Specification`:
@@ -322,5 +358,3 @@ A: Thường do thiếu `npm ci` — dependencies local và CI có thể khác n
 A: Kiểm tra **tên file** (không phải thư mục) có đúng PascalCase không. Ví dụ: `components/schemas/ticket/createRequest.yaml` → sai, phải là `CreateRequest.yaml`.
 
 ---
-
-> Có thắc mắc hoặc muốn đề xuất thêm rule mới → tạo issue với label `dx/api-conventions` hoặc hỏi trực tiếp trong `#api-dev-log`.

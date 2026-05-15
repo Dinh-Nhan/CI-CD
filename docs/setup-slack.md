@@ -69,9 +69,9 @@ Trong Slack, vào channel `#api-dev-log` và gõ:
 
 Tạo 2 secrets:
 
-| Name | Value |
-|------|-------|
-| `SLACK_BOT_TOKEN` | `xoxb-...` vừa copy ở Bước 1 |
+| Name               | Value                           |
+| ------------------ | ------------------------------- |
+| `SLACK_BOT_TOKEN`  | `xoxb-...` vừa copy ở Bước 1    |
 | `SLACK_CHANNEL_ID` | `C0XXXXXXXXX` vừa copy ở Bước 2 |
 
 > ⚠️ Phải add vào **Repository secrets**, không phải Environment secrets.
@@ -149,13 +149,13 @@ Vào **GitHub → Actions** xem CI có chạy không, và kiểm tra `#api-dev-l
 
 ## Lỗi Thường Gặp
 
-| Lỗi | Nguyên nhân | Fix |
-|-----|-------------|-----|
-| `not_authed` | Token sai hoặc trống | Kiểm tra lại secret SLACK_BOT_TOKEN |
-| `Token length: 0` | Secret chưa được set | Add lại secret trên GitHub |
-| CI không trigger | Workflow chưa có trên `main` | Merge workflow vào main trước |
-| `invalid_auth` | Token bị revoke hoặc sai format | Lấy token mới từ Slack App |
-| `channel_not_found` | Bot chưa được invite | Chạy `/invite @API Dev Bot` trong channel |
+| Lỗi                 | Nguyên nhân                     | Fix                                       |
+| ------------------- | ------------------------------- | ----------------------------------------- |
+| `not_authed`        | Token sai hoặc trống            | Kiểm tra lại secret SLACK_BOT_TOKEN       |
+| `Token length: 0`   | Secret chưa được set            | Add lại secret trên GitHub                |
+| CI không trigger    | Workflow chưa có trên `main`    | Merge workflow vào main trước             |
+| `invalid_auth`      | Token bị revoke hoặc sai format | Lấy token mới từ Slack App                |
+| `channel_not_found` | Bot chưa được invite            | Chạy `/invite @API Dev Bot` trong channel |
 
 ---
 
