@@ -1,6 +1,6 @@
 post:
   summary: Mở lại ticket đã đóng
-  operationId: reopenTicket
+  operationId: updateTicketReopen
   description: >
     Mở lại một ticket đã đóng. Chỉ thực hiện được khi ticket
     đang ở trạng thái đóng (trangthai = 2) và thời gian đóng
@@ -22,7 +22,7 @@ post:
         schema:
           $ref: "../../components/schemas/ticket/ReopenTicketRequest.yaml"
   responses:
-    "201":
+    "200":
       description: Mở lại ticket thành công
       content:
         application/json:
@@ -30,16 +30,16 @@ post:
             $ref: "../../components/schemas/core/StandardSuccess.yaml"
           example:
             success: true
-            data:
-              type: [null]
-            error:
-              type: [null]
+            data: null
+            error: null
     "401":
       $ref: "../../components/responses/Unauthorized.yaml"
-    "404":
-      $ref: "../../components/responses/NotFound.yaml"
     "403":
       $ref: "../../components/responses/Forbidden.yaml"
+    "500":
+      $ref: "../../components/responses/InternalError.yaml"
+    "404":
+      $ref: "../../components/responses/NotFound.yaml"
     "422":
       description: >
         4200 — dữ liệu không hợp lệ.
@@ -50,32 +50,28 @@ post:
           schema:
             $ref: "../../components/schemas/core/StandardError.yaml"
           examples:
-            validationErrors:
-              summary: "Dữ liệu không hợp lệ"
+            validation_error:
+              summary: Dữ liệu không hợp lệ
               value:
                 success: false
                 error:
                   code: 4200
                   message: "Dữ liệu request không hợp lệ"
-                  data:
-                    type: [null]
+                  data: null
             expired:
-              summary: "Quá thời hạn mở lại ticket"
+              summary: Quá thời hạn mở lại
               value:
                 success: false
                 error:
                   code: 4466
-                  message: "Quá thời hạn mở lại"
-                  data:
-                    type: [null]
-            alreadyOpen:
-              summary: "Câu hỏi đang được mở"
+                  message: "Quá thời hạn cho phép mở lại"
+                  data: null
+            already_open:
+              summary: Ticket đang mở
               value:
                 success: false
                 error:
                   code: 4467
                   message: "Câu hỏi đang được mở"
-                  data:
-                    type: [null]
-    "500":
-      $ref: "../../components/responses/InternalServerError.yaml"
+                  data: null
+    
