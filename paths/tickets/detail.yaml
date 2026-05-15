@@ -25,14 +25,10 @@ get:
           schema:
             $ref: "../../components/schemas/core/StandardSuccess.yaml"
     "401":
-      description: 4102 - Token không hợp lệ hoặc đã hết hạn
-      content:
-        application/json:
-          schema:
-            $ref: "../../components/responses/Unauthorized.yaml"
+      $ref: "../../components/responses/Unauthorized.yaml"
     "404":
-      description: 4004 - Không tìm thấy ticket
-      content:
-        application/json:
-          schema:
-            $ref: "../../components/responses/NotFound.yaml"
+      # description: 4004 - Không tìm thấy ticket
+      # content:
+      #   application/json:
+      #     schema:
+      $ref: "../../components/responses/NotFound.yaml"
