@@ -33,10 +33,7 @@ jobs:
       - name: Check changelog changes
         id: diff
         run: |
-          oasdiff changelog old/openapi.yaml new/openapi.yaml > result.txt 2>&1 || true
-          echo "output<<EOF" >> $GITHUB_OUTPUT
-          cat result.txt >> $GITHUB_OUTPUT
-          echo "EOF" >> $GITHUB_OUTPUT
+          oasdiff changelog old/openapi.yaml new/openapi.yaml || true
 
       # - name: Check breaking changes
       #   id: diff
