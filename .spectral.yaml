@@ -72,9 +72,74 @@ rules:
   # Mọi operation phải có response 404 cho GET/PUT/PATCH/DELETE với path parameter
   operation-with-id-must-have-404:
     message: >
-      Operation với path parameter (/{id}) phải có response 404 (Not Found).
+      Operation với path parameter phải có response 404 (Not Found).
     severity: warn
-    given: "$.paths[*~/{id}][get,put,patch,delete]"
+    given: "$.paths[*][get,put,patch,delete]"
     then:
       field: "responses.404"
+      function: truthy
+
+  operation-must-have-summary:
+    message: Operation phải có summary.
+    severity: warn
+    given: "$.paths[*][*]"
+    then:
+      field: "summary"
+      function: truthy
+
+  operation-must-have-description:
+    message: Operation phải có description.
+    severity: warn
+    given: "$.paths[*][*]"
+    then:
+      field: "description"
+      function: truthy
+
+  schema-properties-must-have-description:
+    message: Property "{{property}}" phải có description.
+    severity: info
+    given: "$.components.schemas[*]"
+    then:
+      field: "description"
+      function: truthy
+
+  enum-schema-must-have-description:
+    message: Schema có enum phải có description giải thích ý nghĩa.
+    severity: warn
+    given: "$.components.schemas[*].properties[*][?(@.enum)]"
+    then:
+      field: "description"
+      function: truthy
+
+  path-params-must-be-required:
+    message: Path parameter phải có required: true
+    severity: error
+    given: "$.paths[*][*].parameters[?(@.in=='path')]"
+    then:
+      field: "required"
+      function: truthy
+
+  path-kebab-case:
+    message: Path phải dùng kebab-case.
+    severity: warn
+    given: "$.paths.*~"
+    then:
+      function: pattern
+      functionOptions:
+        match: "^(/[a-z0-9-]+|/{[a-zA-Z0-9_]+})+$"
+
+  response-200-must-have-content:
+    message: Response 200 phải có content/schema.
+    severity: info
+    given: "$.paths[*][get,put,patch].responses.200"
+    then:
+      field: "content"
+      function: truthy
+
+  post-create-should-have-201:
+    message: POST nên trả response 201 Created.
+    severity: info
+    given: "$.paths[*].post.responses"
+    then:
+      field: "201"
       function: truthy
