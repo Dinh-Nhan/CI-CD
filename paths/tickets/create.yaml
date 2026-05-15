@@ -20,13 +20,15 @@ post:
         schema:
           $ref: "../../components/schemas/ticket/CreateTicketRequest.yaml"
   responses:
-    "200":
+    "201":
       description: Tạo ticket thành công
       content:
         application/json:
           schema:
             $ref: "../../components/schemas/core/StandardSuccess.yaml"
     "401":
-      $ref: "../../components/responses/Unauthorized.yaml"
+            $ref: "../../components/responses/Unauthorized.yaml"
     "422":
-      $ref: "../../components/responses/ValidationError.yaml"
+           $ref: "../../components/responses/ValidationError.yaml"
+    "500":
+      $ref: "../../components/responses/InternalServerError.yaml"

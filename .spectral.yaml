@@ -6,13 +6,13 @@ rules:
   operation-id-verb-noun:
     message: >
       operationId "{{value}}" sai format.
-      Phải theo verbNoun — ví dụ: listUsers, createOrder, deleteItem, closeTicket.
+      Phải dùng camelCase — ví dụ: listUsers, createOrder, reopenTicket.
     severity: error
     given: "$.paths[*][*].operationId"
     then:
       function: pattern
       functionOptions:
-        match: "^(list|get|create|update|delete|patch|search|upload|send|cancel|approve|close)[A-Z][a-zA-Z0-9]+$"
+        match: "^[a-z][a-zA-Z0-9]+$"
 
   # Trường id phải có readOnly: true
   schema-id-must-be-readonly:

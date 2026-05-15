@@ -1,0 +1,15 @@
+type: object
+properties:
+  description:
+    type: string
+    maxLength: 4000
+    description: > 
+      Mô tả lý do mở lại ticket, tối đa 4000 ký tự.
+      Nếu không cung cấp, hệ thống mặc định sẽ là "MỞ LẠI CÂU HỎI"
+    example: "Khách hàng cần thêm thông tin về cách sử dụng sản phẩm."
+  files:
+    type: array
+    maxItems: 3
+    description: "Danh sách file đính kèm hỗ trợ cho việc mở lại ticket. Tối đa 3 file, mỗi file tối đa 10MB."
+    items:
+      $ref: "../common/FileAttachment.yaml"
