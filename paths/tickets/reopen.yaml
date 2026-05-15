@@ -41,24 +41,24 @@ post:
     "403":
       $ref: "../../components/responses/Forbidden.yaml"
     "422":
-          description: >
-            4200 — dữ liệu không hợp lệ.
-            4466 — quá thời hạn 2 tháng.
-            4467 — ticket đang mở.
-          content:
-            application/json:
-              schema:
-                $ref: "../../components/schemas/core/StandardError.yaml"
-              example:
-                validationErrors:
-                  summary: "Dữ liệu không hợp lệ"
-                  value:
-                    success: false
-                    error:
-                      code: 4200
-                      message: "Dữ liệu request không hợp lệ"
-                      data:
-                        type: [null]
+      description: >
+        4200 — dữ liệu không hợp lệ.
+        4466 — quá thời hạn 2 tháng.
+        4467 — ticket đang mở.
+      content:
+        application/json:
+          schema:
+            $ref: "../../components/schemas/core/StandardError.yaml"
+          examples:
+            validationErrors:
+              summary: "Dữ liệu không hợp lệ"
+              value:
+                success: false
+                error:
+                  code: 4200
+                  message: "Dữ liệu request không hợp lệ"
+                  data:
+                    type: [null]
             expired:
               summary: "Quá thời hạn mở lại ticket"
               value:
